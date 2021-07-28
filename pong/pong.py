@@ -1,4 +1,5 @@
 import turtle
+import winsound
 
 wn = turtle.Screen()
 wn.title("Revant's Pong game")
@@ -26,6 +27,20 @@ paddle_2.shape("square")
 paddle_2.penup()
 paddle_2.goto(350,0)
 paddle_2.shapesize(stretch_wid=5,stretch_len=1)
+
+#score
+player_1_score = 0
+player_2_score = 0
+
+#Pen
+
+pen =turtle.Turtle()
+pen.speed(0)
+pen.penup()
+pen.goto(0,260)
+pen.color("white")
+pen.hideturtle()
+pen.write("Welcome to Revant's Pong",align="center",font=("Arial",20,"bold"))
 
 # Ball
 ball = turtle.Turtle()
@@ -76,17 +91,39 @@ while True:
     
     #Setting border
     if ball.ycor() > 290:
+        winsound.PlaySound("D:/prac/pong/bounce.wav", winsound.SND_ASYNC)
+
         ball.sety(290)
         ball.dy *= -1
     
     if ball.ycor() < -290:
+        winsound.PlaySound("D:/prac/pong/bounce.wav", winsound.SND_ASYNC)
+
         ball.sety(-290)
         ball.dy *= -1
     
     if ball.xcor() > 390:
+        player_1_score += 1
+        pen.clear()
+        pen.write("Player 1 : {}     Player 2 : {}".format(player_1_score,player_2_score),align="center",font=("Arial",20,"bold"))
         ball.goto(0,0)
         ball.dx *= -1
     
     if ball.xcor() < -390:
+        pen.clear()
+        player_2_score +=1
+        pen.write("Player 1 : {}     Player 2 : {}".format(player_1_score,player_2_score),align="center",font=("Arial",20,"bold"))
         ball.goto(0,0)
         ball.dx *= -1
+
+    # Collision 
+    if ball.xcor() > 340 and ball.xcor() < 350 and (ball.ycor() < paddle_2.ycor() + 40 and ball.ycor() > paddle_2.ycor() - 40) :
+        ball.setx(340)
+        winsound.PlaySound("D:/prac/pong/bounce.wav", winsound.SND_ASYNC)
+        ball.dx *= -1
+    
+    if ball.xcor() < -340 and ball.xcor() > -350 and (ball.ycor() < paddle_1.ycor() + 40 and ball.ycor() > paddle_1.ycor() -40) :
+        ball.setx(-340)
+        ball.dx *= -1
+        winsound.PlaySound("D:/prac/pong/bounce.wav", winsound.SND_ASYNC)
+
